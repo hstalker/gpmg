@@ -39,6 +39,8 @@ int main(int argc, char* argv[]) {
         fallback.allocate(120) != nullptr,
         "Testing fallback allocator successfully allocates with the fallback.");
 
+    fallback.deallocate(fallback.allocate(1));
+
     free(regionMemory);
     return FAILED_TEST_RESULTS();
 }

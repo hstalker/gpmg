@@ -16,6 +16,18 @@
 
 namespace gpmg {
 
+namespace detail {
+namespace fallback {
+template<typename T, typename std::enable_if<!has_member_func_deallocate<T>::value>::type* = nullptr>
+void deallocateDispatch(T& allocator, void* b) {}
+
+template<typename T, typename std::enable_if<has_member_func_deallocate<T>::value>::type* = nullptr>
+void deallocateDispatch(T& allocator, void* b) {
+    allocator.deallocate(b);
+}
+}
+}
+
 template <typename T>
 constexpr T min(const T arg1, const T arg2) {
     return arg1 <= arg2 ? arg1 : arg2;
@@ -49,28 +61,31 @@ class FallbackAllocator {
         return r;
     }
 
+    void deallocate(void* b) {
+        static_assert(has_member_func_owns<P>::value, "Primary allocator must have a bool owns(void*) member function!");
+        static_assert(has_member_func_deallocate<P>::value || has_member_func_deallocate<F>::value, "Either primary or fallback allocator must have a void deallocate(void*) member function!");        
+
+        if (primary_.owns(b)) {
+            detail::fallback::deallocateDispatch<P>(primary_, b);
+        } else {
+            detail::fallback::deallocateDispatch<F>(fallback_, b);
+        }
+    }
+
+    bool owns(void* b) {
+        static_assert(has_member_func_owns<P>::value, "Primary allocator must have a bool owns(void*) member function!");
+        static_assert(has_member_func_owns<F>::value, "Fallback allocator must have a bool owns(void*) member function!");
+        
+        return primary_.owns(b) || fallback_.owns(b);
+    }
+
     unsigned int alignment;
 
    private:
     P primary_;
     F fallback_;
 };
-
-/*
-namespace detail {
-template<typename T, typename
-std::enable_if<!has_member_func_allocate1<T>::value>::type* = nullptr>
-void allocateDispatch(const T& allocater)
-{
-}
-
-template<typename T, typename
-std::enable_if<has_member_func_allocate1<T>::value>::type* = nullptr>
-void allocateDispatch(const T& allocater)
-{
-    allocater.allocate();
-}
-}*/
+    
 }
 
 #endif

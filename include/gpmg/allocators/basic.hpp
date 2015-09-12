@@ -29,24 +29,10 @@ class Basic {
         UNUSED(n)
         return nullptr;
     }
+    
     unsigned int alignment = 1;
 };
 
-/*
-namespace detail {
-template<typename T, typename
-std::enable_if<!has_member_func_allocate1<T>::value>::type* = nullptr>
-void allocateDispatch(const T& allocater)
-{
-}
-
-template<typename T, typename
-std::enable_if<has_member_func_allocate1<T>::value>::type* = nullptr>
-void allocateDispatch(const T& allocater)
-{
-    allocater.allocate();
-}
-}*/
 }
 
 #endif

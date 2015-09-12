@@ -18,8 +18,8 @@ namespace gpmg {
 
 class Region {
    public:
-    Region(void* buf, unsigned int size)
-        : b(static_cast<u8*>(buf)), e(b + size), p(b) {}
+    Region(void* b, unsigned int size)
+        : b_(static_cast<u8*>(b)), e_(b_ + size), p_(b_) {}
     ~Region() = default;
     Region(const Region&) = default;
     Region(Region&&) = default;
@@ -27,37 +27,32 @@ class Region {
     Region& operator=(Region&&) = default;
 
     void* allocate(std::size_t n) {
-        if (static_cast<std::size_t>(e - p) < n) {
+        if (static_cast<std::size_t>(e_ - p_) < n) {
             return nullptr;
         }
 
-        auto result = p;
-        p += n;
+        auto result = p_;
+        p_ += n;
 
         return result;
+    }
+
+    void deallocate(void* b) {
+        if (owns(b)) {
+            p_ -= (static_cast<u8*>(b) - b_);
+        }
+    }
+
+    bool owns(void* b) {
+        return b_ <= static_cast<u8*>(b) && e_ >= static_cast<u8*>(b); 
     }
 
     unsigned int alignment = 1;
 
    private:
-    u8 *b, *e, *p;
+    u8 *b_, *e_, *p_;
 };
 
-/*
-namespace detail {
-template<typename T, typename
-std::enable_if<!has_member_func_allocate1<T>::value>::type* = nullptr>
-void allocateDispatch(const T& allocater)
-{
-}
-
-template<typename T, typename
-std::enable_if<has_member_func_allocate1<T>::value>::type* = nullptr>
-void allocateDispatch(const T& allocater)
-{
-    allocater.allocate();
-}
-}*/
 }
 
 #endif

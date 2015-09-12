@@ -12,6 +12,8 @@
 namespace gpmg {
 GENERATE_HAS_MEMBER_FUNC(void*, allocate, std::size_t)
 GENERATE_HAS_MEMBER_VAR(unsigned int, alignment)
+GENERATE_HAS_MEMBER_FUNC(bool, owns, void*)
+GENERATE_HAS_MEMBER_FUNC(void, deallocate, void*)
 }
 
 #endif

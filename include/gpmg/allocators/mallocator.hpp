@@ -26,25 +26,18 @@ class Mallocator {
     Mallocator& operator=(Mallocator&&) = default;
 
     void* allocate(std::size_t n) { return malloc(n); }
+    void deallocate(void* b) {
+        free(b);
+    }
+
+    // can't do owns with malloc without storing extra info
+    //bool owns(void* b) {
+    //    return 
+    //}
 
     unsigned int alignment = 1;
 };
-
-/*
-namespace detail {
-template<typename T, typename
-std::enable_if<!has_member_func_allocate1<T>::value>::type* = nullptr>
-void allocateDispatch(const T& allocater)
-{
-}
-
-template<typename T, typename
-std::enable_if<has_member_func_allocate1<T>::value>::type* = nullptr>
-void allocateDispatch(const T& allocater)
-{
-    allocater.allocate();
-}
-}*/
+    
 }
 
 #endif
