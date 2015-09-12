@@ -26,18 +26,15 @@ class Mallocator {
     Mallocator& operator=(Mallocator&&) = default;
 
     void* allocate(std::size_t n) { return malloc(n); }
-    void deallocate(void* b) {
-        free(b);
-    }
+    void deallocate(void* b) { free(b); }
 
     // can't do owns with malloc without storing extra info
-    //bool owns(void* b) {
-    //    return 
+    // bool owns(void* b) {
+    //    return
     //}
 
     unsigned int alignment = 1;
 };
-    
 }
 
 #endif

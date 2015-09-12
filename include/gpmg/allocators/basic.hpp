@@ -29,10 +29,9 @@ class Basic {
         UNUSED(n)
         return nullptr;
     }
-    
+
     unsigned int alignment = 1;
 };
-
 }
 
 #endif

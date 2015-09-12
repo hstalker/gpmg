@@ -44,7 +44,7 @@ class Region {
     }
 
     bool owns(void* b) {
-        return b_ <= static_cast<u8*>(b) && e_ >= static_cast<u8*>(b); 
+        return b_ <= static_cast<u8*>(b) && e_ >= static_cast<u8*>(b);
     }
 
     unsigned int alignment = 1;
@@ -52,7 +52,6 @@ class Region {
    private:
     u8 *b_, *e_, *p_;
 };
-
 }
 
 #endif
