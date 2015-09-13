@@ -9,7 +9,7 @@
 #define GPMG_ALLOCATORS_REGION_ALLOCATOR_HPP
 
 #include <type_traits>
-#include "allocator-traits.hpp"
+#include "tools.hpp"
 #include "../misc/types.hpp"
 #include "../misc/platform.hpp"
 #include "../misc/assert.hpp"

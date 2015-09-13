@@ -11,7 +11,7 @@
 #include "allocators/region-allocator.hpp"
 #include "allocators/malloc-allocator.hpp"
 #include "allocators/fallback-allocator.hpp"
-#include "allocators/static-dispatchers.hpp"
+#include "allocators/tools.hpp"
 #include "allocators/utils.hpp"
 
 #endif

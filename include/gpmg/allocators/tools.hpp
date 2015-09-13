@@ -1,18 +1,28 @@
-/// \file      static-dispatchers.hpp
+/// \file      tools.hpp
 /// \author    Hector Stalker
 /// \copyright Copyright 2015 Hector Stalker. All rights reserved.
 ///            This project is released under the MIT License.
-/// \brief     Defines various SFINAE based static dispatch functions for use in
-/// the allocators.
+/// \brief     Defines standard utilities useful for defining statically
+/// introspective allocators.
 
-#ifndef GPMG_ALLOCATORS_STATIC_DISPATCHERS_HPP
-#define GPMG_ALLOCATORS_STATIC_DISPATCHERS_HPP
+#ifndef GPMG_ALLOCATORS_TOOLS_HPP
+#define GPMG_ALLOCATORS_TOOLS_HPP
 
-#include "allocator-traits.hpp"
+#include "../misc/types.hpp"
 #include "../misc/platform.hpp"
+#include "../misc/static-introspection.hpp"
 
 namespace gpmg {
-namespace detail {
+namespace tools {
+// Generate all the member function/variable determining traits
+GENERATE_HAS_MEMBER_FUNC(void*, allocate, std::size_t)
+GENERATE_HAS_MEMBER_VAR(unsigned int, alignment)
+GENERATE_HAS_MEMBER_FUNC(bool, owns, void*)
+GENERATE_HAS_MEMBER_FUNC(void, deallocate, void*)
+GENERATE_HAS_MEMBER_FUNC(bool, reallocate, void*, std::size_t, std::size_t)
+GENERATE_HAS_MEMBER_FUNC(bool, expand, void*, std::size_t)
+
+// The SFINAE functions that attempt to call member functions of an allocator
 /// Do nothing if the given allocator has no appropriate allocate method
 template <typename T, typename std::enable_if<
                           !hasMemberFunc_deallocate<T>::value>::type* = nullptr>

@@ -8,7 +8,7 @@
 #define GPMG_ALLOCATORS_UTILS_HPP
 
 #include <cstring>
-#include "static-dispatchers.hpp"
+#include "tools.hpp"
 
 namespace gpmg {
 
@@ -21,7 +21,7 @@ namespace gpmg {
 template <typename T>
 void* allocate(T& a, std::size_t size) {
     // Deallocate old buffer if possible
-    return detail::tryToAllocate<T>(size);
+    return tools::tryToAllocate<T>(size);
 }
 
 /// A global deallocate function for our generic allocators
@@ -31,7 +31,7 @@ void* allocate(T& a, std::size_t size) {
 template <typename T>
 void deallocate(T& a, void* b) {
     // Deallocate old buffer if possible
-    detail::tryToDeallocate<T>(b);
+    tools::tryToDeallocate<T>(b);
 }
 
 /// A global reallocate function for our generic allocators
@@ -50,7 +50,7 @@ bool reallocate(T& a, void* b, const std::size_t oldSize,
 
     // Break out successfully if the buffer is able to be expanded to the new
     // size
-    if (detail::tryToExpand<T>(a, b, oldSize, newSize)) {
+    if (tools::tryToExpand<T>(a, b, oldSize, newSize)) {
         return true;
     }
 
@@ -61,7 +61,7 @@ bool reallocate(T& a, void* b, const std::size_t oldSize,
     }
 
     // Deallocate old buffer if possible
-    detail::tryToDeallocate<T>(b);
+    tools::tryToDeallocate<T>(b);
 
     b = r;
     return true;
@@ -89,7 +89,7 @@ bool crossAllocatorMove(void* b, From& from, To& to, std::size_t oldSize,
     memcpy(dest, b, newSize);
 
     // Try to deallocate the old buffer if possible
-    detail::tryToDeallocate<From>(b);
+    tools::tryToDeallocate<From>(b);
 
     // Set the input pointer to point at the newly allocated
     b = dest;
