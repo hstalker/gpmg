@@ -16,7 +16,8 @@ int main(int argc, char* argv[]) {
     auto regionMemory = static_cast<char*>(malloc(regionSize));
     auto region = RegionAllocator(regionMemory, regionSize);
     auto mallocator = MallocAllocator();
-    auto fallback = FallbackAllocator<RegionAllocator, MallocAllocator>(region, mallocator);
+    auto fallback =
+        FallbackAllocator<RegionAllocator, MallocAllocator>(region, mallocator);
 
     // Basic tests
     CHECK(basic.allocate(10) == nullptr,

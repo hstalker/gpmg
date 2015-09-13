@@ -16,7 +16,8 @@
 
 namespace gpmg {
 
-/// An allocator that takes a fixed size buffer and allocates linearly into that.
+/// An allocator that takes a fixed size buffer and allocates linearly into
+/// that.
 /// Allocation is merely a pointer addition. Can not deallocate piecewise.
 class RegionAllocator {
    public:
@@ -47,7 +48,8 @@ class RegionAllocator {
     }
 
     /// Tests whether this allocator instance owns the memory given
-    /// \param b Pointer to the block of memory which is being checked for ownership
+    /// \param b Pointer to the block of memory which is being checked for
+    /// ownership
     /// \return Whether the memory is owned by this allocator or not
     bool owns(void* b) {
         // Check if the pointer address lies within the range between the
@@ -55,12 +57,13 @@ class RegionAllocator {
         return beg_ <= static_cast<u8*>(b) && end_ >= static_cast<u8*>(b);
     }
 
-    unsigned int alignment = 1; /// The memory alignment the allocator should use
+    unsigned int alignment =
+        1;  /// The memory alignment the allocator should use
 
    private:
-    u8* beg_; /// Pointer to the beginning of the region
-    u8* end_; /// Pointer to the end of the region
-    u8* p_; /// Pointer to the current position in the region
+    u8* beg_;  /// Pointer to the beginning of the region
+    u8* end_;  /// Pointer to the end of the region
+    u8* p_;    /// Pointer to the current position in the region
 };
 }
 

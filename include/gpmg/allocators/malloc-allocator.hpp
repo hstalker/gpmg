@@ -34,7 +34,8 @@ class MallocAllocator {
     /// \param b The memory block to try to deallocate
     void deallocate(void* b) { free(b); }
 
-    unsigned int alignment = 1; /// The memory alignment the allocator should use
+    unsigned int alignment =
+        1;  /// The memory alignment the allocator should use
 };
 }
 

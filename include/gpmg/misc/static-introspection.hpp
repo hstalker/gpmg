@@ -12,7 +12,7 @@
 #define GENERATE_HAS_MEMBER_FUNC(returnType, name, ...)                   \
     \
 template<typename T> \
-class hasMemberFunc_##name {                                            \
+class hasMemberFunc_##name {                                              \
     \
 private:                                                                  \
         typedef char Yes;                                                 \
@@ -42,7 +42,7 @@ public:                                                                   \
 #define GENERATE_HAS_MEMBER_VAR(type, name)                          \
     \
 template<typename T> \
-class hasMemberVar_##name {                                        \
+class hasMemberVar_##name {                                          \
     \
 private:                                                             \
         typedef char Yes;                                            \
