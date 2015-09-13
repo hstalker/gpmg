@@ -7,12 +7,12 @@
 #ifndef GPMG_MISC_STATIC_INTROSPECTION_HPP
 #define GPMG_MISC_STATIC_INTROSPECTION_HPP
 
-/// Generate a trait has_member_func_***, where *** is the member function
+/// Generate a trait hasMemberFunc_***, where *** is the member function
 /// name
 #define GENERATE_HAS_MEMBER_FUNC(returnType, name, ...)                   \
     \
 template<typename T> \
-class has_member_func_##name {                                            \
+class hasMemberFunc_##name {                                            \
     \
 private:                                                                  \
         typedef char Yes;                                                 \
@@ -38,11 +38,11 @@ public:                                                                   \
     \
 };
 
-/// Generate a trait has_member_var_*** where *** is the member variable name
+/// Generate a trait hasMemberVar_*** where *** is the member variable name
 #define GENERATE_HAS_MEMBER_VAR(type, name)                          \
     \
 template<typename T> \
-class has_member_var_##name {                                        \
+class hasMemberVar_##name {                                        \
     \
 private:                                                             \
         typedef char Yes;                                            \

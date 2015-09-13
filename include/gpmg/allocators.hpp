@@ -7,9 +7,11 @@
 #ifndef GPMG_ALLOCATORS_HPP
 #define GPMG_ALLOCATORS_HPP
 
-#include "allocators/basic.hpp"
-#include "allocators/region.hpp"
-#include "allocators/mallocator.hpp"
+#include "allocators/basic-allocator.hpp"
+#include "allocators/region-allocator.hpp"
+#include "allocators/malloc-allocator.hpp"
 #include "allocators/fallback-allocator.hpp"
+#include "allocators/static-dispatchers.hpp"
+#include "allocators/utils.hpp"
 
 #endif

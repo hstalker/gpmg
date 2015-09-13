@@ -12,6 +12,6 @@
 
 /// Assert macro. Has a description field for assert related
 /// information
-#define ASSERT(expr, description) assert(expr&& description)
+#define GPMG_ASSERT(expr, description) assert(expr&& description)
 
 #endif

@@ -11,12 +11,12 @@ int main(int argc, char* argv[]) {
     UNUSED(argc)
     UNUSED(argv)
 
-    auto basic = Basic();
+    auto basic = BasicAllocator();
     const size_t regionSize = 100;
     auto regionMemory = static_cast<char*>(malloc(regionSize));
-    auto region = Region(regionMemory, regionSize);
-    auto mallocator = Mallocator();
-    FallbackAllocator<Region, Mallocator> fallback(region, mallocator);
+    auto region = RegionAllocator(regionMemory, regionSize);
+    auto mallocator = MallocAllocator();
+    auto fallback = FallbackAllocator<RegionAllocator, MallocAllocator>(region, mallocator);
 
     // Basic tests
     CHECK(basic.allocate(10) == nullptr,
