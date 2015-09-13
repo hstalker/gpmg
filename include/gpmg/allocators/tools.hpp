@@ -20,7 +20,7 @@ GENERATE_HAS_MEMBER_VAR(unsigned int, alignment)
 GENERATE_HAS_MEMBER_FUNC(bool, owns, void*)
 GENERATE_HAS_MEMBER_FUNC(void, deallocate, void*)
 GENERATE_HAS_MEMBER_FUNC(bool, reallocate, void*, std::size_t, std::size_t)
-GENERATE_HAS_MEMBER_FUNC(bool, expand, void*, std::size_t)
+GENERATE_HAS_MEMBER_FUNC(bool, expand, void*, std::size_t, std::size_t)
 
 // The SFINAE functions that attempt to call member functions of an allocator
 /// Do nothing if the given allocator has no appropriate allocate method
@@ -77,5 +77,13 @@ bool tryToExpand(T& allocator, void* b, const std::size_t oldSize,
 }
 }
 }
+
+/// A macro that checks if the bare necessities of one of our allocators are
+/// present via static assertions
+#define ALLOCATOR_WELLFORMED(Allocator)                                      \
+    static_assert(tools::hasMemberFunc_allocate<Allocator>::value,           \
+                  "Allocators MUST have a void allocate(size_t) function!"); \
+    static_assert(tools::hasMemberVar_alignment<Allocator>::value,           \
+                  "Allocators MUST have a uint alignment variable!");
 
 #endif

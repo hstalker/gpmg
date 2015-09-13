@@ -95,6 +95,16 @@ bool crossAllocatorMove(void* b, From& from, To& to, std::size_t oldSize,
     b = dest;
     return true;
 }
+
+/// Returns the minimum of two given values
+/// \tparam T The type of the two value to be compared
+/// (should be numerical in some way)
+/// \param arg1 The first number
+/// \param arg2 The second number
+template <typename T>
+constexpr T min(const T arg1, const T arg2) {
+    return arg1 <= arg2 ? arg1 : arg2;
+}
 }
 
 #endif

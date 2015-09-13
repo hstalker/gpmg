@@ -17,16 +17,6 @@
 
 namespace gpmg {
 
-/// Returns the minimum of two given values
-/// \tparam T The type of the two value to be compared
-/// (should be numerical in some way)
-/// \param arg1 The first number
-/// \param arg2 The second number
-template <typename T>
-constexpr T min(const T arg1, const T arg2) {
-    return arg1 <= arg2 ? arg1 : arg2;
-}
-
 /// An allocator that utilises a primary allocator and a fallback.
 /// When the allocator fails to allocate into the primary, it tries
 /// to allocate with the fallback.
@@ -35,12 +25,8 @@ constexpr T min(const T arg1, const T arg2) {
 template <typename P, typename F>
 class FallbackAllocator {
    public:
-    static_assert(tools::hasMemberFunc_allocate<P>::value &&
-                      tools::hasMemberFunc_allocate<F>::value,
-                  "Allocaters MUST have a void allocate(size_t) function!");
-    static_assert(tools::hasMemberVar_alignment<P>::value &&
-                      tools::hasMemberVar_alignment<F>::value,
-                  "Allocaters MUST have a uint alignment variable!");
+    ALLOCATOR_WELLFORMED(P)
+    ALLOCATOR_WELLFORMED(F)
 
     FallbackAllocator(const P& primary, const F& fallback)
         : alignment(min(primary_.alignment, fallback_.alignment)),
@@ -71,11 +57,12 @@ class FallbackAllocator {
     void deallocate(void* b) {
         static_assert(
             tools::hasMemberFunc_owns<P>::value,
-            "Primary allocator must have a bool owns(void*) member function!");
-        static_assert(tools::hasMemberFunc_deallocate<P>::value ||
-                          tools::hasMemberFunc_deallocate<F>::value,
-                      "Either primary or fallback allocator must have a void "
-                      "deallocate(void*) member function!");
+            "Primary allocator must have a conforming 'owns' member function!");
+        static_assert(
+            tools::hasMemberFunc_deallocate<P>::value ||
+                tools::hasMemberFunc_deallocate<F>::value,
+            "Either primary or fallback allocator must have a conforming "
+            "'deallocate' member function!");
 
         if (primary_.owns(b)) {
             tools::tryToDeallocate<P>(primary_, b);
@@ -94,7 +81,7 @@ class FallbackAllocator {
                     const std::size_t newSize) {
         static_assert(
             tools::hasMemberFunc_owns<P>::value,
-            "Primary allocator must have a bool owns(void*) member function!");
+            "Primary allocator must have a conforming 'owns' member function!");
 
         // If the size of the reallocation is 0, then just try to deallocate the
         // block
@@ -146,10 +133,10 @@ class FallbackAllocator {
     bool owns(void* b) {
         static_assert(
             tools::hasMemberFunc_owns<P>::value,
-            "Primary allocator must have a bool owns(void*) member function!");
-        static_assert(
-            tools::hasMemberFunc_owns<F>::value,
-            "Fallback allocator must have a bool owns(void*) member function!");
+            "Primary allocator must have a conforming 'owns' member function!");
+        static_assert(tools::hasMemberFunc_owns<F>::value,
+                      "Fallback allocator must have a conforming 'owns' member "
+                      "function!");
 
         return primary_.owns(b) || fallback_.owns(b);
     }
