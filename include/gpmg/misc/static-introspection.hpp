@@ -9,57 +9,57 @@
 
 /// Generate a trait hasMemberFunc_***, where *** is the member function
 /// name
-#define GENERATE_HAS_MEMBER_FUNC(returnType, name, ...)                   \
+#define GENERATE_HAS_MEMBER_FUNC(returnType, name, ...)                     \
     \
-template<typename T> \
-class hasMemberFunc_##name {                                              \
+template<typename T_> \
+class hasMemberFunc_##name {                                                \
     \
-private:                                                                  \
-        typedef char Yes;                                                 \
-        typedef Yes No[2];                                                \
-                                                                          \
-        template <typename U, U>                                          \
-        struct really_has;                                                \
-                                                                          \
-        template <typename C>                                             \
-        static Yes& Test(                                                 \
-            really_has<returnType (C::*)(__VA_ARGS__) const, &C::name>*); \
-                                                                          \
-        template <typename C>                                             \
-        static Yes& Test(                                                 \
-            really_has<returnType (C::*)(__VA_ARGS__), &C::name>*);       \
-                                                                          \
-        template <typename>                                               \
-        static No& Test(...);                                             \
+private:                                                                    \
+        typedef char Yes_;                                                  \
+        typedef Yes_ No_[2];                                                \
+                                                                            \
+        template <typename U_, U_>                                          \
+        struct ReallyHas_;                                                  \
+                                                                            \
+        template <typename C_>                                              \
+        static Yes_& test_(                                                 \
+            ReallyHas_<returnType (C_::*)(__VA_ARGS__) const, &C_::name>*); \
+                                                                            \
+        template <typename C_>                                              \
+        static Yes_& test_(                                                 \
+            ReallyHas_<returnType (C_::*)(__VA_ARGS__), &C_::name>*);       \
+                                                                            \
+        template <typename>                                                 \
+        static No_& test_(...);                                             \
     \
 \
-public:                                                                   \
-        static bool const value = sizeof(Test<T>(0)) == sizeof(Yes);      \
+public:                                                                     \
+        static bool const value = sizeof(test_<T_>(0)) == sizeof(Yes_);     \
     \
 };
 
 /// Generate a trait hasMemberVar_*** where *** is the member variable name
-#define GENERATE_HAS_MEMBER_VAR(type, name)                          \
+#define GENERATE_HAS_MEMBER_VAR(type, name)                             \
     \
-template<typename T> \
-class hasMemberVar_##name {                                          \
+template<typename T_> \
+class hasMemberVar_##name {                                             \
     \
-private:                                                             \
-        typedef char Yes;                                            \
-        typedef Yes No[2];                                           \
-                                                                     \
-        template <typename U, U>                                     \
-        struct really_has;                                           \
-                                                                     \
-        template <typename C>                                        \
-        static Yes& Test(really_has<type(C::*), &C::name>*);         \
-                                                                     \
-        template <typename>                                          \
-        static No& Test(...);                                        \
+private:                                                                \
+        typedef char Yes_;                                              \
+        typedef Yes_ No_[2];                                            \
+                                                                        \
+        template <typename U_, U_>                                      \
+        struct ReallyHas_;                                              \
+                                                                        \
+        template <typename C_>                                          \
+        static Yes_& test_(ReallyHas_<type(C_::*), &C_::name>*);        \
+                                                                        \
+        template <typename>                                             \
+        static No_& test_(...);                                         \
     \
 \
-public:                                                              \
-        static bool const value = sizeof(Test<T>(0)) == sizeof(Yes); \
+public:                                                                 \
+        static bool const value = sizeof(test_<T_>(0)) == sizeof(Yes_); \
     \
 };
 
